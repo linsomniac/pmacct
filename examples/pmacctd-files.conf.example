@@ -1,0 +1,10 @@
+interface: eth0
+daemonize: false
+aggregate: sum_host
+plugins: print
+promisc: true
+print_output: csv
+print_output_file: /usr/local/lib/pmacct/data/eth0-%s.csv
+print_time_roundoff: m
+print_refresh_time: 60
+networks_file: /usr/local/lib/pmacct/networks

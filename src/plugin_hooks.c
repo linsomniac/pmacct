@@ -253,7 +253,9 @@ reprocess:
 	  
 	  if (channels_list[index].status->backlog > ((channels_list[index].plugin->cfg.pipe_size/channels_list[index].plugin->cfg.buffer_size)*channels_list[index].plugin->cfg.pipe_backlog)/100) {
 	    channels_list[index].status->wakeup = channels_list[index].request;
-	    write(channels_list[index].pipe, &channels_list[index].rg.ptr, CharPtrSz); 
+	    if (write(channels_list[index].pipe, &channels_list[index].rg.ptr, CharPtrSz) != CharPtrSz) {
+              printf("ERROR: Failed during write: %s\n", strerror(errno));
+	    }
 	    channels_list[index].status->backlog = 0;
 	  }
 	}
@@ -532,7 +534,9 @@ void fill_pipe_buffer()
 
     if (channels_list[index].status->wakeup) {
       channels_list[index].status->wakeup = channels_list[index].request;
-      write(channels_list[index].pipe, &channels_list[index].rg.ptr, CharPtrSz);
+      if (write(channels_list[index].pipe, &channels_list[index].rg.ptr, CharPtrSz) != CharPtrSz) {
+         printf("ERROR: Failed during write: %s\n", strerror(errno));
+      }
     }
   }
 }
